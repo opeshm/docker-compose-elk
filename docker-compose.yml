@@ -1,0 +1,35 @@
+version: "2"
+services:
+  elasticsearch:
+    image: elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    networks:
+      - elknetwork
+
+  kibana:
+    image: kibana
+    ports:
+      - "5601:5601"
+    links:
+      - elasticsearch
+    networks:
+          - elknetwork
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:5.5.0
+    volumes:
+      - ./logstash/pipeline/:/usr/share/logstash/pipeline/
+    links:
+      - elasticsearch
+    depends_on:
+      - elasticsearch
+    ports:
+      - "9600:9600"
+    networks:
+          - elknetwork
+
+networks:
+  elknetwork:
+    driver: bridge
