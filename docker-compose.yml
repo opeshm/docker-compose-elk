@@ -1,7 +1,13 @@
 version: "2"
 services:
   elasticsearch:
-    image: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.2
+    environment:
+      - discovery.type=single-node
+      - cluster.name=docker-cluster
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticdata:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -9,16 +15,20 @@ services:
       - elknetwork
 
   kibana:
-    image: kibana
+    image: docker.elastic.co/kibana/kibana:6.2.2
+    volumes:
+      - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     ports:
       - "5601:5601"
     links:
       - elasticsearch
+    depends_on:
+      - elasticsearch
     networks:
-          - elknetwork
+      - elknetwork
 
   logstash:
-    image: docker.elastic.co/logstash/logstash:5.5.0
+    image: docker.elastic.co/logstash/logstash:6.2.2
     volumes:
       - ./logstash/pipeline/:/usr/share/logstash/pipeline/
     links:
@@ -27,9 +37,19 @@ services:
       - elasticsearch
     ports:
       - "9600:9600"
+      - "5000:5000"
     networks:
           - elknetwork
+
+volumes:
+  elasticdata:
+    driver: local
 
 networks:
   elknetwork:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: 192.168.99.0/24
+        gateway: 192.168.99.1
