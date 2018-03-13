@@ -1,23 +1,13 @@
-# docker-compose-elk
+# ELK Stack using docker containers
 
-Launch a ELK Stack with docker
+### Launch a ELK Stack with docker
 
-## HOW TO
+<img src="https://www.elastic.co/assets/blte1ccb52ef00ca60e/icon-elastic-stack-bb.svg" height="200px" />
+<img src="https://raw.githubusercontent.com/docker-library/docs/b449be7df57e9ed9086bb5821bfb5d6cdc5d67a4/docker-dev/logo.png" height="200px"/>
+
+## Basic usage
+Run docker compose:
 ```
-
 $ docker-compose up
-
-```
-
-## ElasticSearch
-[ElasticSearch local](http://localhost:9200)
-
-## Kibana
-[Kibana local](http://localhost:5601/)
-
-## Logstash
-```
-host: localHost
-port: 9600"
 
 ```
