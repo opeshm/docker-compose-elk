@@ -31,6 +31,8 @@ services:
     image: docker.elastic.co/logstash/logstash:6.2.2
     volumes:
       - ./logstash/pipeline/:/usr/share/logstash/pipeline/
+      - ./logstash/logs/apache:/var/tmp/logs/apache
+      - ./logstash/logs/syslog:/var/tmp/logs/syslog
     links:
       - elasticsearch
     depends_on:
@@ -47,9 +49,9 @@ volumes:
 
 networks:
   elknetwork:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-      - subnet: 192.168.99.0/24
-        gateway: 192.168.99.1
+    # driver: bridge
+    # ipam:
+    #   driver: default
+    #   config:
+    #   - subnet: 192.168.20.0/24
+    #     gateway: 192.168.20.1
